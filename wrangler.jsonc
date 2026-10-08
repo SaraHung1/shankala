@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "shankala",
+  "main": "src/entry.py",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["python_workers"],
+
+  // Static site. Cloudflare serves these files directly; only /api/* runs Python.
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+
+  // SQL database. Replace database_id with the id printed by:
+  //   npx wrangler d1 create shankala-db
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "shankala-db",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  "observability": { "enabled": true }
+}
