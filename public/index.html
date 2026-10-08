@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shankala | Hong Kong Street Food in Edmonton</title>
   <meta name="description" content="Shankala brings authentic Hong Kong street food to Edmonton (YEG). Find us at AsiaFest and local events around the city.">
+  <meta name="theme-color" content="#0e0b0b">
 
-  <!-- Social sharing preview (Facebook, Instagram, iMessage, etc.) -->
+  <!-- Social sharing preview -->
   <meta property="og:title" content="Shankala | Hong Kong Street Food in Edmonton">
   <meta property="og:description" content="Authentic Hong Kong street food, made by Hongkongers in YEG.">
   <meta property="og:type" content="website">
@@ -17,130 +18,149 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+HK:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=Noto+Sans+HK:wght@500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
   <header class="site-header">
-    <div class="container nav">
-      <a href="/" class="logo">Shankala</a>
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
+    <nav class="nav" aria-label="Main">
+      <a href="/" class="logo"><span class="logo-mark">S</span>Shankala</a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span>
       </button>
-      <nav class="nav-links">
-        <a href="#about">Our Story</a>
+      <div class="nav-links" id="nav-links">
+        <a href="#story">Story</a>
         <a href="#menu">Menu</a>
-        <a href="#find-us">Find Us</a>
+        <a href="#events">Events</a>
         <a href="#contact" class="btn btn-small">Contact</a>
-      </nav>
-    </div>
+      </div>
+    </nav>
   </header>
 
   <main>
     <!-- HERO -->
     <section class="hero">
-      <div class="container">
-        <p class="eyebrow">香港街頭小食 · Edmonton, AB</p>
-        <h1>Hong Kong street food,<br>made in YEG</h1>
-        <p class="lead">We're a group of Hongkongers bringing the flavours of Hong Kong's busy streets to Edmonton.</p>
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <p class="pill"><span class="dot"></span>香港街頭小食 · Edmonton, AB</p>
+        <h1>Hong Kong<br>street food,<br><span class="neon">made in YEG.</span></h1>
+        <p class="lead">A crew of Hongkongers bringing the taste of Mong Kok's busy streets to Edmonton. Egg waffles, curry fish balls and silky milk tea, made the way we remember them.</p>
         <div class="hero-actions">
-          <a href="#menu" class="btn">See our menu</a>
-          <a href="#find-us" class="btn btn-outline">Where to find us</a>
+          <a href="#menu" class="btn">See the menu</a>
+          <a href="#events" class="btn btn-ghost">Where to find us →</a>
+        </div>
+      </div>
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <span>雞蛋仔</span><span>咖喱魚蛋</span><span>燒賣</span><span>港式奶茶</span>
+          <span>雞蛋仔</span><span>咖喱魚蛋</span><span>燒賣</span><span>港式奶茶</span>
         </div>
       </div>
     </section>
 
-    <!-- OUR STORY -->
-    <section id="about" class="section">
-      <div class="container two-col">
-        <div>
-          <h2>Our story</h2>
-          <p>Shankala started with a simple idea: we missed the food we grew up with. The egg waffles from a street-corner stall, curry fish balls on a skewer, a cup of silky milk tea on the way home. These were everyday tastes in Hong Kong, and we wanted to share them with our new home.</p>
-          <p>We started out selling at <strong>AsiaFest</strong> in Edmonton, and the response from the community has kept us going. Everything we make is inspired by real Hong Kong recipes. Come say hi at our next event!</p>
+    <!-- STORY -->
+    <section id="story" class="section">
+      <div class="container story">
+        <div class="story-text reveal">
+          <p class="kicker">Our story</p>
+          <h2>From AsiaFest to your neighbourhood.</h2>
+          <p>Shankala started with a simple feeling: we missed home. The egg waffles from a street-corner stall, curry fish balls on a skewer, a cup of milk tea on the way back from school. These were everyday tastes in Hong Kong, and we wanted to share them with our new home.</p>
+          <p>We started out at <strong>AsiaFest Edmonton</strong>, and the support from the community has kept us cooking. Every recipe is inspired by the real thing.</p>
         </div>
-        <div class="image-placeholder" role="img" aria-label="Photo placeholder">
-          <!-- Replace with: <img src="/images/team.jpg" alt="The Shankala team at AsiaFest"> -->
-          Add a photo of your team or stall
+        <div class="story-stats reveal">
+          <div class="stat"><span class="stat-num">HK</span><span class="stat-label">Recipes from home</span></div>
+          <div class="stat"><span class="stat-num">YEG</span><span class="stat-label">Proudly local</span></div>
+          <div class="stat stat-wide photo-slot">
+            <!-- Replace with: <img src="/images/team.jpg" alt="The Shankala team at AsiaFest"> -->
+            <span>Add a photo of your team or stall</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- MENU -->
-    <section id="menu" class="section section-alt">
+    <!-- MENU (loaded from /api/menu) -->
+    <section id="menu" class="section section-dark">
       <div class="container">
-        <h2 class="center">Our menu</h2>
-        <p class="center muted">Hong Kong street food favourites. The menu may change from event to event.</p>
-        <div class="cards">
-          <article class="card">
-            <p class="zh">雞蛋仔</p>
-            <h3>Egg Waffles</h3>
-            <p>Crispy outside, soft and fluffy inside. The classic Hong Kong street snack.</p>
-          </article>
-          <article class="card">
-            <p class="zh">咖喱魚蛋</p>
-            <h3>Curry Fish Balls</h3>
-            <p>Bouncy fish balls simmered in a rich, mildly spicy curry sauce.</p>
-          </article>
-          <article class="card">
-            <p class="zh">燒賣</p>
-            <h3>Siu Mai</h3>
-            <p>Street-style siu mai, served on a skewer with soy sauce and chili oil.</p>
-          </article>
-          <article class="card">
-            <p class="zh">港式奶茶</p>
-            <h3>Hong Kong Milk Tea</h3>
-            <p>Strong black tea, pulled smooth with evaporated milk. Hot or iced.</p>
-          </article>
+        <div class="section-head reveal">
+          <p class="kicker">The menu</p>
+          <h2>Street food favourites</h2>
+          <p class="muted">The menu can change from event to event.</p>
+        </div>
+        <div class="menu-grid" id="menu-grid" aria-live="polite">
+          <div class="menu-card skeleton"></div>
+          <div class="menu-card skeleton"></div>
+          <div class="menu-card skeleton"></div>
+          <div class="menu-card skeleton"></div>
         </div>
       </div>
     </section>
 
-    <!-- FIND US -->
-    <section id="find-us" class="section">
+    <!-- EVENTS (loaded from /api/events) -->
+    <section id="events" class="section">
       <div class="container">
-        <h2 class="center">Find us</h2>
-        <p class="center muted">We pop up at festivals and markets around Edmonton.</p>
-        <div class="events">
-          <article class="event">
-            <p class="event-date">[Date]</p>
-            <div>
-              <h3>AsiaFest Edmonton</h3>
-              <p>[Location]</p>
-            </div>
-          </article>
-          <article class="event">
-            <p class="event-date">[Date]</p>
-            <div>
-              <h3>[Next event name]</h3>
-              <p>[Location]</p>
-            </div>
-          </article>
+        <div class="section-head reveal">
+          <p class="kicker">Find us</p>
+          <h2>Upcoming pop-ups</h2>
+          <p class="muted">We pop up at festivals and markets around Edmonton.</p>
         </div>
-        <p class="center">
-          Follow us on Instagram for the latest dates:
-          <a href="https://instagram.com/shankala" target="_blank" rel="noopener">@shankala</a>
-        </p>
+        <div class="events" id="events-list" aria-live="polite"></div>
       </div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="section section-alt">
+    <!-- CONTACT (posts to /api/contact) -->
+    <section id="contact" class="section section-tint">
       <div class="container contact">
-        <h2>Get in touch</h2>
-        <p>Want us at your event, or have a question? We'd love to hear from you.</p>
-        <ul class="contact-list">
-          <li><strong>Email:</strong> <a href="mailto:hello@shankala.com">hello@shankala.com</a></li>
-          <li><strong>Instagram:</strong> <a href="https://instagram.com/shankala" target="_blank" rel="noopener">@shankala</a></li>
-          <li><strong>Based in:</strong> Edmonton, Alberta</li>
-        </ul>
-        <a href="mailto:hello@shankala.com" class="btn">Send us an email</a>
+        <div class="contact-intro reveal">
+          <p class="kicker">Say hi</p>
+          <h2>Book us for your event.</h2>
+          <p>Catering a party, running a market, or just have a question? Send us a message and we'll get back to you.</p>
+          <ul class="contact-list">
+            <li><span>Instagram</span><a href="https://instagram.com/shankala" target="_blank" rel="noopener">@shankala</a></li>
+            <li><span>Based in</span>Edmonton, Alberta</li>
+          </ul>
+        </div>
+
+        <form class="contact-form reveal" id="contact-form" novalidate>
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" autocomplete="name" maxlength="100" required>
+            <p class="field-error" data-for="name"></p>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" maxlength="254" required>
+            <p class="field-error" data-for="email"></p>
+          </div>
+          <div class="field">
+            <label for="topic">Topic</label>
+            <select id="topic" name="topic">
+              <option value="general">General question</option>
+              <option value="catering">Catering</option>
+              <option value="event">Book us for an event</option>
+            </select>
+            <p class="field-error" data-for="topic"></p>
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" maxlength="2000" required></textarea>
+            <p class="field-error" data-for="message"></p>
+          </div>
+          <!-- Honeypot: hidden from people, bots fill it in -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">Website</label>
+            <input id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+          <button type="submit" class="btn btn-block">Send message</button>
+          <p class="form-status" id="form-status" role="status"></p>
+        </form>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container">
+    <div class="container footer-inner">
+      <a href="/" class="logo"><span class="logo-mark">S</span>Shankala</a>
       <p>&copy; <span id="year"></span> Shankala · Hong Kong street food in Edmonton</p>
     </div>
   </footer>

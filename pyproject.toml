@@ -1,0 +1,12 @@
+[project]
+name = "shankala"
+version = "0.1.0"
+description = "Shankala — Hong Kong street food in Edmonton. Cloudflare Python Worker + D1."
+requires-python = ">=3.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "workers-py",
+    "workers-runtime-sdk",
+]

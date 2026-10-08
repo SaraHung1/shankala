@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Run Python unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Check SQL migrations run cleanly on SQLite
+        run: |
+          python - <<'PY'
+          import sqlite3, pathlib
+          db = sqlite3.connect(":memory:")
+          for f in sorted(pathlib.Path("migrations").glob("*.sql")):
+              db.executescript(f.read_text())
+              print("applied", f.name)
+          count = db.execute("SELECT COUNT(*) FROM menu_items").fetchone()[0]
+          assert count > 0, "menu seed is empty"
+          print(count, "menu items seeded")
+          PY

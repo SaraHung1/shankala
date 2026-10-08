@@ -1,7 +1,19 @@
+# OS / editors
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+
+# Node / Cloudflare
 node_modules/
 .wrangler/
+.dev.vars
 .env
+
+# Python
+.venv/
+.venv-workers/
+python_modules/
+pylock.toml
+__pycache__/
+*.pyc

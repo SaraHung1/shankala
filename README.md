@@ -1,61 +1,80 @@
-# Shankala Website
+# Shankala 山卡拉
 
-The website for Shankala, Hong Kong street food in Edmonton. It is a simple static site (plain HTML, CSS and JavaScript). No build step is needed.
+Website for **Shankala**, a Hong Kong street food business in Edmonton (YEG) that started at AsiaFest.
 
-## Files
+It runs entirely on Cloudflare's edge:
 
-| File / folder   | What it is                                                          |
-|-----------------|---------------------------------------------------------------------|
-| `index.html`    | The home page. Edit the text in `[brackets]`.                       |
-| `css/styles.css`| Styling. Change the brand colors at the top of the file.            |
-| `js/main.js`    | Mobile menu and footer year.                                        |
-| `images/`       | Put your photos and logo here.                                      |
-| `404.html`      | Shown when someone visits a page that doesn't exist.                |
-| `favicon.svg`   | The small icon in the browser tab.                                  |
-| `_headers`      | Security and caching settings that Cloudflare Pages applies.        |
-| `robots.txt`, `sitemap.xml` | Help search engines find the site.                      |
+| Layer     | Tech                                   | Where                     |
+|-----------|----------------------------------------|---------------------------|
+| Front end | HTML, CSS, vanilla JavaScript           | `public/`                 |
+| API       | **Python** (Cloudflare Python Worker)   | `src/`                    |
+| Content   | Python data, in `src/content.py`        | `src/content.py`          |
+| Database  | **SQL** schema, ready for Cloudflare D1 (not connected yet) | `migrations/` |
+| Tests/CI  | Python `unittest` and GitHub Actions    | `tests/`, `.github/`      |
 
-## Preview on your computer
-
-Open `index.html` in your browser, or run a local server from this folder so links like `/css/styles.css` work:
-
-```bash
-python3 -m http.server 8000
+```
+Browser ──► Cloudflare edge ──┬─► public/*  (static files, served directly)
+                              └─► /api/*    (src/entry.py, Python)
 ```
 
-Then visit http://localhost:8000
+## API
 
-## Upload to GitHub
+| Method | Path           | What it does                                                    |
+|--------|----------------|-----------------------------------------------------------------|
+| GET    | `/api/health`  | Health check                                                    |
+| GET    | `/api/menu`    | Menu items (cached 5 min)                                       |
+| GET    | `/api/events`  | Upcoming events, soonest first; past events are filtered out    |
+| POST   | `/api/contact` | Validates a contact message (`201`, or `422` + field errors)    |
 
-1. Go to https://github.com/new and create a repository named `shankala-website`. Don't add a README, because this folder already has one.
-2. In Terminal, from this folder:
+Design notes:
+- **Validation lives in `src/validation.py`**, separate from Cloudflare code, so it can be unit tested with plain Python.
+- **Spam:** a hidden "honeypot" field; bots that fill it get a fake success response.
+- **Error handling:** unknown routes return `404`, wrong methods `405`, bad JSON `400`, and unexpected errors are logged and returned as `500`.
+- **Contact messages** are written to **Workers Logs** for now (Cloudflare dashboard → Workers & Pages → shankala → Logs). They aren't stored anywhere else until the database is connected.
+
+## Run it locally
+
+You need Node.js and [uv](https://docs.astral.sh/uv/). On a Mac: `brew install node uv`.
 
 ```bash
-git remote add origin https://github.com/<your-username>/shankala-website.git
-git push -u origin main
+npm install     # installs wrangler
+uv sync         # installs the Python Workers SDK
+npm run dev     # http://localhost:8787
+npm test        # Python unit tests
 ```
 
-## Connect to Cloudflare Pages
+## Deploy to Cloudflare
 
-1. Log in to https://dash.cloudflare.com, then go to **Workers & Pages → Create → Pages → Connect to Git**.
-2. Pick the `shankala-website` repository.
-3. Use these build settings:
-   - **Framework preset:** None
+1. Push to GitHub.
+2. In the Cloudflare dashboard, go to **Workers & Pages → Create → Import a repository** and pick this repo. Then set:
    - **Build command:** *(leave empty)*
-   - **Build output directory:** `/`
-4. Click **Save and Deploy**. Your site will be live at `https://shankala-website.pages.dev`.
-5. Each time you push to `main`, Cloudflare redeploys the site automatically.
+   - **Deploy command:** `pip install uv && uv run pywrangler deploy`
+3. Every push to `main` redeploys. The site goes live at `https://shankala.<your-subdomain>.workers.dev`.
 
-### Custom domain (optional)
+**Custom domain:** in the Worker, open **Settings → Domains & Routes → Add → Custom domain**. Then update the domain in `public/index.html`, `public/robots.txt` and `public/sitemap.xml`.
 
-In your Pages project, open **Custom domains → Set up a custom domain** and enter your domain (for example `shankala.com`).
-After that, replace `https://shankala.com` in `index.html`, `robots.txt` and `sitemap.xml` if your domain is different.
+> Note: This project uses a **Cloudflare Worker with static assets**, not Cloudflare *Pages*, because Pages can't run Python.
 
-## Before you launch
+## Updating content
 
-- [ ] Replace all `[placeholder]` text in `index.html`
-- [ ] Update the email, phone and location in the Contact section
-- [ ] Add photos to `images/` and swap out the image placeholder
-- [ ] Add `images/og-image.png` (1200×630) for link previews on social media
-- [ ] Set your brand colors in `css/styles.css`
-- [ ] Update the domain in `index.html`, `robots.txt` and `sitemap.xml`
+Edit `src/content.py` (menu items and events), then commit and push.
+
+## Next step: connect the SQL database (Cloudflare D1)
+
+`migrations/` already has the schema: `menu_items`, `events` and `contact_messages` tables, with `CHECK` constraints and indexes. CI checks that these files run cleanly on SQLite. To switch it on:
+
+1. `npx wrangler login`, then `npx wrangler d1 create shankala-db`
+2. Add the binding it prints to `wrangler.jsonc`, with `"migrations_dir": "migrations"`
+3. `npx wrangler d1 migrations apply shankala-db --remote`
+4. In `src/entry.py`, replace the `content.py` lookups with queries such as
+   `await self.env.DB.prepare("SELECT ... FROM menu_items WHERE is_available = 1").all()`,
+   and save contact messages with a parameterized `INSERT ... VALUES (?, ?, ?, ?)` and `.bind(...)`
+5. Add `npx wrangler d1 migrations apply shankala-db --remote &&` to the start of the deploy command
+
+## Before launch
+
+- [ ] Confirm the menu items and add prices in `src/content.py`
+- [ ] Add real events in `src/content.py`
+- [ ] Add a team or stall photo (`public/images/`) and swap it into the "Our story" section
+- [ ] Add `public/images/og-image.png` (1200×630) for social link previews
+- [ ] Check the Instagram handle and domain
