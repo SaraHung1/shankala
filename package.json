@@ -4,7 +4,7 @@
   "description": "Shankala — Hong Kong street food in Edmonton. Cloudflare Python Worker.",
   "scripts": {
     "dev": "uv run pywrangler dev",
-    "deploy": "uv run pywrangler deploy",
+    "deploy": "wrangler deploy",
     "test": "python3 -m unittest discover -s tests -v"
   },
   "devDependencies": {

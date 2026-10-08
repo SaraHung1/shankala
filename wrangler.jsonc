@@ -3,7 +3,7 @@
   "name": "shankala",
   "main": "src/entry.py",
   "compatibility_date": "2026-10-01",
-  "compatibility_flags": ["python_workers"],
+  "compatibility_flags": ["python_workers", "disable_python_external_sdk"],
 
   // Static site. Cloudflare serves these files directly; only /api/* runs Python.
   "assets": {

@@ -48,7 +48,7 @@ npm test        # Python unit tests
 1. Push to GitHub.
 2. In the Cloudflare dashboard, go to **Workers & Pages → Create → Import a repository** and pick this repo. Then set:
    - **Build command:** *(leave empty)*
-   - **Deploy command:** `pip install uv && uv run pywrangler deploy`
+   - **Deploy command:** `npx wrangler deploy` (the default)
 3. Every push to `main` redeploys. The site goes live at `https://shankala.<your-subdomain>.workers.dev`.
 
 **Custom domain:** in the Worker, open **Settings → Domains & Routes → Add → Custom domain**. Then update the domain in `public/index.html`, `public/robots.txt` and `public/sitemap.xml`.
